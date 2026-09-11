@@ -99,6 +99,24 @@ class Ticket {
     }
 
     /**
+     * Obtener tickets creados por un usuario (sin incluir asignados)
+     */
+    public function findByCreator($userId) {
+        $stmt = $this->db->prepare("
+            SELECT t.*,
+                   u1.name AS created_by_name,
+                   u2.name AS assigned_to_name
+            FROM tickets t
+            LEFT JOIN users u1 ON t.created_by = u1.id
+            LEFT JOIN users u2 ON t.assigned_to = u2.id
+            WHERE t.created_by = :userId
+            ORDER BY t.id DESC
+        ");
+        $stmt->execute(['userId' => $userId]);
+        return $stmt->fetchAll();
+    }
+
+    /**
      * Crear ticket nuevo
      */
     public function create($title, $description, $priority, $createdBy) {
