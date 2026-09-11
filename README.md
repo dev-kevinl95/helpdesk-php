@@ -35,9 +35,9 @@ Acceder a `http://localhost:8000`
 
 | Rol     | Email                | Contraseña |
 | ------- | -------------------- | ---------- |
-| Admin   | admin@helpdesk.com   | 123456     |
-| Técnico | tecnico@helpdesk.com | 123456     |
-| Cliente | cliente@helpdesk.com | 123456     |
+| Admin   | admin@helpdesk.com   | admin123   |
+| Técnico | kevin@helpdesk.com   | tecnico123 |
+| Cliente | cliente@ejemplo.com  | cliente123 |
 
 ## Stack
 
