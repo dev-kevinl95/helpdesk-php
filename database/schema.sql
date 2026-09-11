@@ -77,16 +77,17 @@ CREATE INDEX IF NOT EXISTS idx_comments_ticket_id ON comments(ticket_id);
 
 -- ============================================
 -- Datos de prueba
+-- Contraseñas hasheadas con password_hash()
 -- Solo se insertan si la tabla está vacía
 -- ============================================
 INSERT INTO users (name, email, password, role)
-SELECT 'Admin Principal', 'admin@helpdesk.com', 'admin123', 'Admin'
+SELECT 'Admin Principal', 'admin@helpdesk.com', '$2y$12$E35VyMS8TRVJ23jrFulK3O0bXaW3SP7VFAHjS9ok3x.16F4BfpYMS', 'Admin'
 WHERE NOT EXISTS (SELECT 1 FROM users WHERE email = 'admin@helpdesk.com');
 
 INSERT INTO users (name, email, password, role)
-SELECT 'Kevin Tecnico', 'kevin@helpdesk.com', 'tecnico123', 'Tecnico'
+SELECT 'Kevin Tecnico', 'kevin@helpdesk.com', '$2y$12$wUwdgD4nSG.qoc0tgExerO21z2IToKWZ9ZNE3H/v8oTDJui7MVjyu', 'Tecnico'
 WHERE NOT EXISTS (SELECT 1 FROM users WHERE email = 'kevin@helpdesk.com');
 
 INSERT INTO users (name, email, password, role)
-SELECT 'Cliente Ejemplo', 'cliente@ejemplo.com', 'cliente123', 'Cliente'
+SELECT 'Cliente Ejemplo', 'cliente@ejemplo.com', '$2y$12$dOM4N4UChZLeHjAd65ZgNuMSbfRsQdEPklCMcuQspN1WxGKbjEEnK', 'Cliente'
 WHERE NOT EXISTS (SELECT 1 FROM users WHERE email = 'cliente@ejemplo.com');

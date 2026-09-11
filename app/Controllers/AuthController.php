@@ -25,7 +25,7 @@ class AuthController {
                 $user = $userModel->findByEmail($email);
 
                 // En producción se usaría password_verify() con hash
-                if ($user && $user['password'] === $password) {
+                if ($user && password_verify($password, $user['password'])) {
                     // Guardar datos en sesión
                     $_SESSION['user_id']   = $user['id'];
                     $_SESSION['user_name'] = $user['name'];

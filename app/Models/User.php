@@ -91,6 +91,14 @@ class User {
     }
 
     /**
+     * Actualizar contraseña de usuario
+     */
+    public function updatePassword($id, $hashedPassword) {
+        $stmt = $this->db->prepare("UPDATE users SET password = :password WHERE id = :id");
+        return $stmt->execute(['password' => $hashedPassword, 'id' => $id]);
+    }
+
+    /**
      * Verificar si un email ya existe
      */
     public function emailExists($email) {
