@@ -2,6 +2,43 @@
 
 Sistema de gestión de tickets de soporte técnico. Flujo empresarial básico para administrar incidencias, asignar técnicos y dar seguimiento hasta su resolución.
 
+## Requisitos
+
+- PHP 8.5 o superior
+- PostgreSQL 14+
+- Composer
+- Servidor web (Apache/Nginx o `php -S localhost:8000 -t public`)
+
+## Instalación
+
+```bash
+# 1. Clonar el repositorio
+git clone https://github.com/tu-usuario/HelpDeskPhp.git
+cd HelpDeskPhp
+
+# 2. Crear la base de datos en PostgreSQL
+psql -U postgres -c "CREATE DATABASE helpdesk;"
+
+# 3. Importar el esquema
+psql -U postgres -d helpdesk -f database/schema.sql
+
+# 4. Configurar variables de entorno (opcional, credentials por defecto en config/database.php)
+cp .env.example .env
+
+# 5. Iniciar el servidor de desarrollo
+php -S localhost:8000 -t public
+```
+
+Acceder a `http://localhost:8000`
+
+### Credenciales de prueba
+
+| Rol     | Email                | Contraseña |
+| ------- | -------------------- | ---------- |
+| Admin   | admin@helpdesk.com   | 123456     |
+| Técnico | tecnico@helpdesk.com | 123456     |
+| Cliente | cliente@helpdesk.com | 123456     |
+
 ## Stack
 
 | Capa        | Tecnologías                    |
@@ -67,27 +104,31 @@ HelpDeskPhp/
 ├── app/
 │   ├── Controllers/
 │   │   ├── AuthController.php
+│   │   ├── DashboardController.php
+│   │   ├── HomeController.php
 │   │   ├── TicketController.php
-│   │   └── UserController.php
+│   │   └── Api/
+│   │       └── TicketApiController.php
 │   ├── Models/
 │   │   ├── User.php
 │   │   ├── Ticket.php
 │   │   └── Comment.php
 │   ├── Services/
-│   │   └── TicketService.php
+│   │   └── TicketService.php        ← en desarrollo
 │   └── Views/
 │       ├── layouts/      (header.php, footer.php)
 │       ├── auth/         (login.php)
 │       ├── tickets/      (index, create, edit, show)
-│       ├── users/        (index)
+│       │                   └── edit.php ← en desarrollo
+│       ├── users/        (index)    ← en desarrollo
 │       └── dashboard/    (index)
 ├── config/
 │   └── database.php
 ├── public/
 │   ├── index.php         ← Punto de entrada
-│   ├── css/
-│   ├── js/
-│   └── assets/
+│   ├── css/              ← en desarrollo
+│   ├── js/               ← en desarrollo
+│   └── assets/           ← en desarrollo
 ├── routes/
 │   ├── web.php           ← Rutas de páginas
 │   └── api.php           ← Rutas de API REST
@@ -154,6 +195,8 @@ USER
 ## API REST
 
 Todas las respuestas son en formato JSON.
+
+> **Nota:** El controlador API está en desarrollo. Actualmente retorna respuestas placeholder. Los endpoints están documentados a continuación según el diseño planeado.
 
 ### Tickets
 
