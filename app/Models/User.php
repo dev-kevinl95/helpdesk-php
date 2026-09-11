@@ -15,7 +15,7 @@ class User {
      * Buscar usuario por ID
      */
     public function findById($id) {
-        $stmt = $this->db->prepare("SELECT id, name, email, role, created_at FROM users WHERE id = :id");
+        $stmt = $this->db->prepare("SELECT id, name, email, password, role, created_at FROM users WHERE id = :id");
         $stmt->execute(['id' => $id]);
         return $stmt->fetch();
     }

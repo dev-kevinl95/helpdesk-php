@@ -124,6 +124,7 @@
         </div>
         <div class="user-info">
             <?= htmlspecialchars($currentUser['name']) ?> (<?= $currentUser['role'] ?>)
+            <a href="/profile">Mi perfil</a>
             <a href="/logout">Salir</a>
         </div>
     </nav>

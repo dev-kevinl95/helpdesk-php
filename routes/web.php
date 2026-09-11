@@ -42,4 +42,8 @@ $webRoutes = [
         require_once BASE_PATH . '/app/Controllers/AdminController.php';
         AdminController::createUser();
     },
+    '/profile' => function() {
+        require_once BASE_PATH . '/app/Controllers/ProfileController.php';
+        ProfileController::changePassword();
+    },
 ];
