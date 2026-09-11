@@ -68,11 +68,30 @@ if (preg_match('#^/tickets/(\d+)/delete$#', $uri, $matches)) {
     exit;
 }
 
-// API dinámicas: /api/tickets/{id}, /api/tickets/{id}/comments, /api/users/{id}/tickets
+// Admin: /admin/users/{id}/edit y /admin/users/{id}/delete
+if (preg_match('#^/admin/users/(\d+)/edit$#', $uri, $matches)) {
+    require_once BASE_PATH . '/app/Controllers/AdminController.php';
+    AdminController::editUser($matches[1]);
+    exit;
+}
+
+if (preg_match('#^/admin/users/(\d+)/delete$#', $uri, $matches)) {
+    require_once BASE_PATH . '/app/Controllers/AdminController.php';
+    AdminController::deleteUser($matches[1]);
+    exit;
+}
+
+// API dinámicas: /api/tickets/{id}, /api/tickets/{id}/comments, /api/users/{id}/tickets, /api/users/{id}
 if (preg_match('#^/api/#', $uri)) {
     require_once BASE_PATH . '/app/Controllers/Api/TicketApiController.php';
+    require_once BASE_PATH . '/app/Controllers/Api/UserApiController.php';
     header('Content-Type: application/json');
-    TicketApiController::handle();
+
+    if (preg_match('#^/api/users#', $uri)) {
+        UserApiController::handle();
+    } else {
+        TicketApiController::handle();
+    }
     exit;
 }
 

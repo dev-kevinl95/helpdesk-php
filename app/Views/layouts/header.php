@@ -119,7 +119,7 @@
             <a href="/dashboard" class="brand">Help Desk</a>
             <a href="/tickets">Tickets</a>
             <?php if ($currentUser['role'] === 'Admin'): ?>
-                <a href="/users">Usuarios</a>
+                <a href="/admin/users">Usuarios</a>
             <?php endif; ?>
         </div>
         <div class="user-info">

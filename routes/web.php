@@ -34,4 +34,12 @@ $webRoutes = [
         require_once BASE_PATH . '/app/Controllers/TicketController.php';
         TicketController::create();
     },
+    '/admin/users' => function() {
+        require_once BASE_PATH . '/app/Controllers/AdminController.php';
+        AdminController::users();
+    },
+    '/admin/users/create' => function() {
+        require_once BASE_PATH . '/app/Controllers/AdminController.php';
+        AdminController::createUser();
+    },
 ];
