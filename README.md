@@ -33,11 +33,13 @@ Acceder a `http://localhost:8000`
 
 ### Credenciales de prueba
 
-| Rol     | Email                | Contraseña |
-| ------- | -------------------- | ---------- |
-| Admin   | admin@helpdesk.com   | admin123   |
-| Técnico | kevin@helpdesk.com   | tecnico123 |
-| Cliente | cliente@ejemplo.com  | cliente123 |
+| Rol     | Email                | Contraseña (texto plano) |
+| ------- | -------------------- | ------------------------ |
+| Admin   | admin@helpdesk.com   | admin123                 |
+| Técnico | kevin@helpdesk.com   | tecnico123               |
+| Cliente | cliente@ejemplo.com  | cliente123               |
+
+> Las contraseñas se almacenan hasheadas con `password_hash()` en la base de datos.
 
 ## Stack
 
@@ -105,10 +107,11 @@ HelpDeskPhp/
 │   ├── Controllers/
 │   │   ├── AuthController.php
 │   │   ├── DashboardController.php
-│   │   ├── HomeController.php
 │   │   ├── TicketController.php
+│   │   ├── AdminController.php
 │   │   └── Api/
-│   │       └── TicketApiController.php
+│   │       ├── TicketApiController.php
+│   │       └── UserApiController.php
 │   ├── Models/
 │   │   ├── User.php
 │   │   ├── Ticket.php
@@ -119,8 +122,8 @@ HelpDeskPhp/
 │       ├── layouts/      (header.php, footer.php)
 │       ├── auth/         (login.php)
 │       ├── tickets/      (index, create, edit, show)
-│       │                   └── edit.php ← en desarrollo
-│       ├── users/        (index)    ← en desarrollo
+│       ├── admin/
+│       │   └── users/    (index, create, edit)
 │       └── dashboard/    (index)
 ├── config/
 │   └── database.php
@@ -148,8 +151,9 @@ HelpDeskPhp/
 | id       | int     | PK, autoincremental  |
 | name     | string  | Nombre completo      |
 | email    | string  | Correo electrónico   |
-| password | string  | Contraseña (hash)    |
+| password | string  | Contraseña (hash bcrypt) |
 | role     | enum    | Admin / Técnico / Cliente |
+| created_at | datetime | Fecha de registro     |
 
 **tickets**
 
@@ -196,28 +200,38 @@ USER
 
 Todas las respuestas son en formato JSON.
 
-> **Nota:** El controlador API está en desarrollo. Actualmente retorna respuestas placeholder. Los endpoints están documentados a continuación según el diseño planeado.
-
 ### Tickets
 
-| Método   | Ruta                   | Descripción                  |
-| -------- | ---------------------- | ---------------------------- |
-| `GET`    | `/api/tickets`         | Listar todos los tickets     |
-| `GET`    | `/api/tickets/:id`     | Obtener un ticket por ID     |
-| `POST`   | `/api/tickets`         | Crear un ticket nuevo        |
-| `PUT`    | `/api/tickets/:id`     | Actualizar un ticket         |
-| `DELETE` | `/api/tickets/:id`     | Eliminar un ticket           |
+| Método   | Ruta                              | Descripción                      |
+| -------- | --------------------------------- | -------------------------------- |
+| `GET`    | `/api/tickets`                    | Listar todos los tickets         |
+| `GET`    | `/api/tickets/:id`                | Obtener un ticket por ID         |
+| `POST`   | `/api/tickets`                    | Crear un ticket nuevo            |
+| `PUT`    | `/api/tickets/:id`                | Actualizar un ticket             |
+| `DELETE` | `/api/tickets/:id`                | Eliminar un ticket               |
+| `PATCH`  | `/api/tickets/:id/status`         | Cambiar estado del ticket        |
+| `GET`    | `/api/tickets/:id/comments`       | Listar comentarios de un ticket  |
+| `POST`   | `/api/tickets/:id/comments`       | Agregar comentario a ticket      |
 
 ### Filtros
 
-| Método | Ruta                          | Descripción            |
-| ------ | ----------------------------- | ---------------------- |
-| `GET`  | `/api/tickets?status=pending` | Filtrar por estado     |
-| `GET`  | `/api/tickets?priority=high`  | Filtrar por prioridad  |
+| Método | Ruta                             | Descripción            |
+| ------ | -------------------------------- | ---------------------- |
+| `GET`  | `/api/tickets?status=Pendiente`  | Filtrar por estado     |
+| `GET`  | `/api/tickets?priority=Alta`     | Filtrar por prioridad  |
+
+### Usuarios
+
+| Método   | Ruta               | Descripción              |
+| -------- | ------------------ | ------------------------ |
+| `GET`    | `/api/users`       | Listar todos los usuarios |
+| `GET`    | `/api/users/:id`   | Obtener un usuario por ID |
+| `POST`   | `/api/users`       | Crear un usuario nuevo    |
+| `PUT`    | `/api/users/:id`   | Actualizar un usuario     |
+| `DELETE` | `/api/users/:id`   | Eliminar un usuario       |
 
 ### Relaciones
 
 | Método | Ruta                          | Descripción               |
 | ------ | ----------------------------- | ------------------------- |
 | `GET`  | `/api/users/:id/tickets`      | Tickets de un usuario     |
-| `POST` | `/api/tickets/:id/comments`   | Agregar comentario a ticket |
