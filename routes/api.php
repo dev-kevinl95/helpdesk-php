@@ -10,4 +10,8 @@ $apiRoutes = [
         require_once BASE_PATH . '/app/Controllers/Api/TicketApiController.php';
         TicketApiController::handle();
     },
+    '/api/tickets/comments' => function() {
+        require_once BASE_PATH . '/app/Controllers/Api/TicketApiController.php';
+        TicketApiController::handle();
+    },
 ];

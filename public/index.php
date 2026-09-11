@@ -44,6 +44,38 @@ if (preg_match('#^/tickets/(\d+)/comment$#', $uri, $matches)) {
     exit;
 }
 
+if (preg_match('#^/tickets/(\d+)/assign$#', $uri, $matches)) {
+    require_once BASE_PATH . '/app/Controllers/TicketController.php';
+    TicketController::assign($matches[1]);
+    exit;
+}
+
+if (preg_match('#^/tickets/(\d+)/edit$#', $uri, $matches)) {
+    require_once BASE_PATH . '/app/Controllers/TicketController.php';
+    TicketController::edit($matches[1]);
+    exit;
+}
+
+if (preg_match('#^/tickets/(\d+)/status$#', $uri, $matches)) {
+    require_once BASE_PATH . '/app/Controllers/TicketController.php';
+    TicketController::updateStatus($matches[1]);
+    exit;
+}
+
+if (preg_match('#^/tickets/(\d+)/delete$#', $uri, $matches)) {
+    require_once BASE_PATH . '/app/Controllers/TicketController.php';
+    TicketController::delete($matches[1]);
+    exit;
+}
+
+// API dinámicas: /api/tickets/{id}, /api/tickets/{id}/comments, /api/users/{id}/tickets
+if (preg_match('#^/api/#', $uri)) {
+    require_once BASE_PATH . '/app/Controllers/Api/TicketApiController.php';
+    header('Content-Type: application/json');
+    TicketApiController::handle();
+    exit;
+}
+
 // Ruta no encontrada
 http_response_code(404);
 echo '<h1>404 - Página no encontrada</h1>';

@@ -7,8 +7,12 @@
 
 $webRoutes = [
     '/' => function() {
-        require_once BASE_PATH . '/app/Controllers/HomeController.php';
-        HomeController::index();
+        if (isset($_SESSION['user_id'])) {
+            header('Location: /dashboard');
+        } else {
+            header('Location: /login');
+        }
+        exit;
     },
     '/login' => function() {
         require_once BASE_PATH . '/app/Controllers/AuthController.php';
