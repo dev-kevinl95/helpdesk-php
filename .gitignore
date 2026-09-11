@@ -1,4 +1,26 @@
+# Dependencies
 vendor/
+composer.lock
+
+# Environment
 .env
+.env.*
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDEs
+.idea/
+.vscode/
+*.sublime-project
+*.sublime-workspace
+*.swp
+*.swo
+
+# Logs & cache
 *.log
 .cache/
+
+# PHP
+*.phar
