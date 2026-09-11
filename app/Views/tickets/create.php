@@ -35,6 +35,20 @@
             </select>
         </div>
 
+        <?php if (!empty($technicians)): ?>
+        <div class="form-group" style="margin-top:1rem;">
+            <label>Asignar a (opcional)</label>
+            <select name="assigned_to" style="width:100%; padding:0.75rem; border:2px solid #ddd; border-radius:8px; font-size:1rem;">
+                <option value="">Sin asignar</option>
+                <?php foreach ($technicians as $tech): ?>
+                    <option value="<?= $tech['id'] ?>" <?= ($_POST['assigned_to'] ?? '') == $tech['id'] ? 'selected' : '' ?>>
+                        <?= htmlspecialchars($tech['name']) ?>
+                    </option>
+                <?php endforeach; ?>
+            </select>
+        </div>
+        <?php endif; ?>
+
         <button type="submit" class="btn btn-primary" style="margin-top:1.5rem; width:100%;">Crear Ticket</button>
     </form>
 </div>
