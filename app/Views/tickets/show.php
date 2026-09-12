@@ -18,51 +18,53 @@ $canDelete = ($user['role'] === 'Admin');
     <div class="success-msg">Estado cambiado correctamente</div>
 <?php endif; ?>
 
-<div class="page-header">
+<div class="page-header page-header-light">
     <h2>Ticket #<?= $ticket['id'] ?> — <?= htmlspecialchars($ticket['title']) ?></h2>
-    <div>
+    <div style="display: flex; gap: 0.5rem;">
         <?php if ($canEdit): ?>
             <a href="/tickets/<?= $ticket['id'] ?>/edit" class="btn btn-primary">Editar</a>
         <?php endif; ?>
-        <a href="/tickets" class="btn">← Volver</a>
+        <a href="/tickets" class="btn btn-ghost">← Volver</a>
     </div>
 </div>
 
-<div class="card">
-    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
-        <div>
-            <strong>Prioridad:</strong>
-            <span class="badge badge-<?= strtolower($ticket['priority']) ?>"><?= $ticket['priority'] ?></span>
+<div class="card card-light">
+    <div class="ticket-meta">
+        <div class="meta-item">
+            <span class="meta-label">Prioridad</span>
+            <span class="meta-value"><span class="badge badge-light-<?= strtolower($ticket['priority']) ?>"><?= $ticket['priority'] ?></span></span>
         </div>
-        <div>
-            <strong>Estado:</strong>
-            <span class="badge badge-<?= $ticket['status'] === 'Pendiente' ? 'pendiente' : ($ticket['status'] === 'En progreso' ? 'progreso' : 'resuelto') ?>"><?= $ticket['status'] ?></span>
+        <div class="meta-item">
+            <span class="meta-label">Estado</span>
+            <span class="meta-value"><span class="badge badge-light-<?= $ticket['status'] === 'Pendiente' ? 'pendiente' : ($ticket['status'] === 'En progreso' ? 'progreso' : 'resuelto') ?>"><?= $ticket['status'] ?></span></span>
         </div>
-        <div>
-            <strong>Creado por:</strong> <?= htmlspecialchars($ticket['created_by_name'] ?? 'N/A') ?>
+        <div class="meta-item">
+            <span class="meta-label">Creado por</span>
+            <span class="meta-value"><?= htmlspecialchars($ticket['created_by_name'] ?? 'N/A') ?></span>
         </div>
-        <div>
-            <strong>Asignado a:</strong> <?= htmlspecialchars($ticket['assigned_to_name'] ?? 'Sin asignar') ?>
+        <div class="meta-item">
+            <span class="meta-label">Asignado a</span>
+            <span class="meta-value"><?= htmlspecialchars($ticket['assigned_to_name'] ?? 'Sin asignar') ?></span>
         </div>
     </div>
 
     <?php if ($canEdit): ?>
-    <div style="margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid #eee;">
-        <strong>Cambiar estado:</strong>
-        <form method="POST" action="/tickets/<?= $ticket['id'] ?>/status" style="display: flex; gap: 0.5rem; margin-top: 0.5rem; align-items: center;">
-            <select name="status" style="padding: 0.5rem 1rem; border: 2px solid #ddd; border-radius: 8px; font-size: 0.9rem;">
+    <div class="ticket-section">
+        <strong>Cambiar estado</strong>
+        <form method="POST" action="/tickets/<?= $ticket['id'] ?>/status" class="ticket-actions">
+            <select name="status" class="select" style="width: auto;">
                 <option value="Pendiente" <?= $ticket['status'] === 'Pendiente' ? 'selected' : '' ?>>Pendiente</option>
                 <option value="En progreso" <?= $ticket['status'] === 'En progreso' ? 'selected' : '' ?>>En progreso</option>
                 <option value="Resuelto" <?= $ticket['status'] === 'Resuelto' ? 'selected' : '' ?>>Resuelto</option>
             </select>
-            <button type="submit" class="btn btn-primary" style="padding: 0.5rem 1rem;">Cambiar</button>
+            <button type="submit" class="btn btn-primary btn-sm">Cambiar</button>
         </form>
     </div>
 
-    <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid #eee;">
-        <strong>Asignar técnico:</strong>
-        <form method="POST" action="/tickets/<?= $ticket['id'] ?>/assign" style="display: flex; gap: 0.5rem; margin-top: 0.5rem; align-items: center;">
-            <select name="assigned_to" style="padding: 0.5rem 1rem; border: 2px solid #ddd; border-radius: 8px; font-size: 0.9rem;">
+    <div class="ticket-section">
+        <strong>Asignar técnico</strong>
+        <form method="POST" action="/tickets/<?= $ticket['id'] ?>/assign" class="ticket-actions">
+            <select name="assigned_to" class="select" style="width: auto;">
                 <option value="">Sin asignar</option>
                 <?php foreach ($technicians as $tech): ?>
                     <option value="<?= $tech['id'] ?>" <?= ($ticket['assigned_to'] ?? '') == $tech['id'] ? 'selected' : '' ?>>
@@ -70,58 +72,65 @@ $canDelete = ($user['role'] === 'Admin');
                     </option>
                 <?php endforeach; ?>
             </select>
-            <button type="submit" class="btn btn-primary" style="padding: 0.5rem 1rem;">Asignar</button>
+            <button type="submit" class="btn btn-primary btn-sm">Asignar</button>
         </form>
     </div>
     <?php endif; ?>
 
-    <div style="margin-top: 1rem;">
-        <strong>Descripción:</strong>
-        <p style="margin-top: 0.5rem; color: #555; line-height: 1.6;">
+    <div class="ticket-section">
+        <strong>Descripción</strong>
+        <p class="comment-body" style="margin-top: 0.5rem;">
             <?= nl2br(htmlspecialchars($ticket['description'])) ?>
         </p>
     </div>
 
-    <div style="margin-top: 1rem; color: #999; font-size: 0.85rem;">
-        Creado: <?= $ticket['created_at'] ?> |
-        Actualizado: <?= $ticket['updated_at'] ?>
+    <div class="ticket-timestamps">
+        <span>Creado: <?= $ticket['created_at'] ?></span>
+        <span>Actualizado: <?= $ticket['updated_at'] ?></span>
     </div>
 </div>
 
 <?php if ($canDelete): ?>
-<div class="card" style="border: 2px solid #ffebee;">
-    <h3 style="margin-bottom: 1rem; color: #c62828;">Zona de peligro</h3>
+<div class="card card-light danger-zone">
+    <h3>Zona de peligro</h3>
     <form method="POST" action="/tickets/<?= $ticket['id'] ?>/delete"
           onsubmit="return confirm('¿Estás seguro de eliminar este ticket? Esta acción no se puede deshacer.');">
-        <button type="submit" class="btn" style="background: #c62828; color: white; padding: 0.6rem 1.5rem;">Eliminar Ticket</button>
+        <button type="submit" class="btn btn-danger btn-sm">Eliminar Ticket</button>
     </form>
 </div>
 <?php endif; ?>
 
 <!-- Comentarios -->
-<div class="card">
-    <h3 style="margin-bottom: 1rem;">Comentarios (<?= count($comments) ?>)</h3>
+<div class="card card-light">
+    <h3>Comentarios (<?= count($comments) ?>)</h3>
 
     <?php if (empty($comments)): ?>
-        <p style="color: #999;">No hay comentarios aún</p>
+        <div class="empty-state">
+            <div class="empty-icon">💬</div>
+            <p>No hay comentarios aún. Sé el primero en comentar.</p>
+        </div>
     <?php else: ?>
         <?php foreach ($comments as $c): ?>
-            <div style="border-bottom: 1px solid #eee; padding: 1rem 0;">
-                <strong><?= htmlspecialchars($c['user_name'] ?? 'Usuario') ?></strong>
-                <span style="color: #999; font-size: 0.85rem; margin-left: 0.5rem;"><?= $c['created_at'] ?></span>
-                <p style="margin-top: 0.5rem; color: #555;"><?= nl2br(htmlspecialchars($c['content'])) ?></p>
+            <div class="comment">
+                <div class="comment-header">
+                    <span class="comment-author"><?= htmlspecialchars($c['user_name'] ?? 'Usuario') ?></span>
+                    <span class="comment-date"><?= $c['created_at'] ?></span>
+                </div>
+                <p class="comment-body"><?= nl2br(htmlspecialchars($c['content'])) ?></p>
             </div>
         <?php endforeach; ?>
     <?php endif; ?>
 </div>
 
 <!-- Formulario de comentario -->
-<div class="card">
-    <h3 style="margin-bottom: 1rem;">Agregar Comentario</h3>
+<div class="card card-light">
+    <h3>Agregar Comentario</h3>
     <form method="POST" action="/tickets/<?= $ticket['id'] ?>/comment">
-        <textarea name="content" required rows="3" placeholder="Escribe tu comentario..."
-                  style="width:100%; padding:0.75rem; border:2px solid #ddd; border-radius:8px; font-size:1rem; resize:vertical;"></textarea>
-        <button type="submit" class="btn btn-success" style="margin-top: 0.75rem;">Enviar Comentario</button>
+        <div class="form-group">
+            <textarea name="content" required rows="3" class="textarea"
+                      placeholder="Escribe tu comentario..."></textarea>
+        </div>
+        <button type="submit" class="btn btn-success">Enviar Comentario</button>
     </form>
 </div>
 
